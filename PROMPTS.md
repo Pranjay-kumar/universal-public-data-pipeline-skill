@@ -2,6 +2,16 @@
 
 Copy, paste, and replace the target.
 
+## Dataset Design
+
+```text
+Use $universal-public-data-pipeline in dataset-design mode. I want to use public data for BUSINESS_GOAL. Help me decide the entity grain, required fields, nice-to-have fields, freshness, history, coverage target, join keys, exclusions, and what would make the dataset useless. Do not hunt endpoints yet.
+```
+
+```text
+Use $universal-public-data-pipeline to turn this vague ask into a collection-ready DatasetNeed and DatasetSpec: VAGUE_DATA_ASK. Push back on "all data" and propose the smallest useful dataset.
+```
+
 ## Ecommerce Catalog
 
 ```text
@@ -50,6 +60,18 @@ Use $universal-public-data-pipeline to assess public listing metadata from TARGE
 
 ```text
 Use $universal-public-data-pipeline in feasibility-only mode for TARGET_DATA. Do not generate scraper code. Return DatasetSpec, SourcePlan, EndpointPlan, HeaderProfile, ProbeResults, FeasibilityScorecard, DataAcquisitionMemo, FeasibilityReport, PipelinePlan, SampleRows, and ApprovalGate.
+```
+
+## Pagination/Limits Mode
+
+```text
+Use $universal-public-data-pipeline in pagination-limits mode for TARGET_SITE_OR_ENDPOINT. Use tiny sparse probes only. Determine max page size, cursor or offset behavior, deep pagination failure mode, completeness ceiling, and whether partitions can safely increase coverage.
+```
+
+## Source Comparison Mode
+
+```text
+Use $universal-public-data-pipeline in source-comparison mode for TARGET_DATA. Compare official API, public XAPI, sitemap plus detail, embedded JSON, HTML, rendered DOM, and reject paths. Recommend fastest viable, cheapest robust, and highest-coverage routes.
 ```
 
 ## Data Acquisition Decision Memo

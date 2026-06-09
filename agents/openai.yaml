@@ -1,4 +1,4 @@
 interface:
   display_name: "Universal Public Data Pipeline"
-  short_description: "Run public data due diligence before building scrapers"
-  default_prompt: "Use $universal-public-data-pipeline to prove the public data path, score feasibility, identify trapdoors, and plan a reusable pipeline before any full collection."
+  short_description: "Design datasets and prove public data paths before scraping"
+  default_prompt: "Use $universal-public-data-pipeline to design the dataset need, prove the public data path, score feasibility, identify trapdoors, and plan a reusable pipeline before any full collection."

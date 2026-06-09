@@ -2,6 +2,28 @@
 
 Use these as response patterns, not as fixed text.
 
+## Dataset Design
+
+User asks: "I need public data for price intelligence."
+
+Preferred strategy:
+
+1. Identify the decision: alerting, competitive benchmark, assortment gaps, margin analysis, or trend research.
+2. Choose the grain: product, SKU, offer, seller, category, store, or price observation.
+3. Split fields into required and nice-to-have.
+4. Decide freshness and history before source discovery.
+5. Define "good enough" coverage and "useless if" conditions.
+
+Output emphasis:
+
+- decision/workflow
+- entity grain
+- required fields
+- coverage target
+- refresh frequency
+- fields to avoid
+- smallest useful dataset
+
 ## Ecommerce Catalog
 
 User asks: "Find all product metadata for a retailer."
@@ -63,6 +85,8 @@ Output emphasis:
 ## Feasibility Summary Shape
 
 ```markdown
+ModeSelection: ...
+DatasetNeed: ...
 DatasetSpec: ...
 SourcePlan: ...
 EndpointPlan: ...
@@ -76,4 +100,3 @@ PipelinePlan: ...
 SampleRows: ...
 ApprovalGate: full run not approved
 ```
-

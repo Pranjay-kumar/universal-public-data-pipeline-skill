@@ -2,6 +2,35 @@
 
 Every run should produce structured outputs.
 
+## ModeSelection
+
+```json
+{
+  "mode": "dataset-design|feasibility|endpoint-discovery|pagination-limits|source-comparison|pipeline-design|sample-validation|compliance-boundary|execution",
+  "reason": "",
+  "will_probe": false,
+  "will_collect_beyond_sample": false
+}
+```
+
+## DatasetNeed
+
+```json
+{
+  "decision_or_workflow": "",
+  "entity_grain": "",
+  "required_fields": [],
+  "nice_to_have_fields": [],
+  "freshness": "",
+  "history": "",
+  "coverage_target": "",
+  "join_keys": [],
+  "privacy_or_risk_fields": [],
+  "exclusions": [],
+  "useless_if": []
+}
+```
+
 ## DatasetSpec
 
 ```json

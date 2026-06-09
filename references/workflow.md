@@ -2,7 +2,45 @@
 
 Use this workflow for public-data requests.
 
-## 1. Normalize The Ask
+## 1. Select Mode
+
+Choose the narrowest mode that answers the user:
+
+- `dataset-design` when the user is deciding what data they need.
+- `feasibility` when the user named a dataset but has not proven source viability.
+- `endpoint-discovery` when the user wants public web/API routes.
+- `pagination-limits` when completeness or max retrievable rows is the question.
+- `source-comparison` when multiple source strategies are plausible.
+- `pipeline-design` when endpoints/sources are known and the user wants a plan.
+- `sample-validation` when tiny probes or sample rows are needed.
+- `compliance-boundary` when the main question is what not to do.
+- `execution` only when the user explicitly approves collection beyond samples.
+
+Read `modes.md` when the mode affects output shape.
+
+## 2. Design The Dataset Need
+
+Before source discovery, produce `DatasetNeed` when the ask is broad, vague, or business-driven:
+
+```json
+{
+  "decision_or_workflow": "",
+  "entity_grain": "",
+  "required_fields": [],
+  "nice_to_have_fields": [],
+  "freshness": "",
+  "history": "",
+  "coverage_target": "",
+  "join_keys": [],
+  "privacy_or_risk_fields": [],
+  "exclusions": [],
+  "useless_if": []
+}
+```
+
+Push back on "all data" by translating it into the smallest dataset that supports the decision.
+
+## 3. Normalize The Ask
 
 Convert the user's request into a `DatasetSpec`:
 
@@ -20,7 +58,7 @@ Convert the user's request into a `DatasetSpec`:
 
 Infer entity, fields, grain, identifiers, freshness expectations, scale, and storage implications. Ask only when the data target is impossible to infer.
 
-## 2. Discover Sources
+## 4. Discover Sources
 
 Generate a ranked `SourcePlan`. Prefer:
 
@@ -48,13 +86,13 @@ Use the probe ladder:
 8. Rendered DOM automation
 9. Reject or seek another source
 
-## 3. Reverse-Engineer Public Endpoints
+## 5. Reverse-Engineer Public Endpoints
 
 Treat endpoint discovery as the preferred fast path. Derive endpoint templates, params, headers, pagination, field mapping, and fallback routes before writing a scraper.
 
 Read `pattern-library.md`, `endpoint-discovery.md`, and `probing.md` when public web/API routes are likely.
 
-## 4. Probe Before Planning Execution
+## 6. Probe Before Planning Execution
 
 Probe sources with tiny requests. Collect evidence:
 
@@ -69,13 +107,13 @@ Probe sources with tiny requests. Collect evidence:
 - robots/terms signals when relevant
 - failure modes
 
-## 5. Score Feasibility
+## 7. Score Feasibility
 
 Create a balanced `FeasibilityReport`. Be enthusiastic when the path works, but name constraints plainly. Do not hide access, scale, compliance, or data-quality risks.
 
 Read `feasibility-scoring.md`.
 
-## 6. Produce A Data Acquisition Memo
+## 8. Produce A Data Acquisition Memo
 
 Before implementation, make the decision legible:
 
@@ -87,7 +125,7 @@ Before implementation, make the decision legible:
 - reasons to stop or narrow scope
 - recommended next move
 
-## 7. Design The Pipeline
+## 9. Design The Pipeline
 
 Create a `PipelinePlan` with:
 
@@ -103,7 +141,7 @@ Create a `PipelinePlan` with:
 - validation plan
 - full-run approval gate
 
-## 8. Validate Small
+## 10. Validate Small
 
 Before any full run, validate a small sample by default:
 
@@ -113,7 +151,7 @@ Before any full run, validate a small sample by default:
 
 Increase only when the user approves. Full runs must write incrementally so partial output survives timeouts.
 
-## 9. Execute Only After Approval
+## 11. Execute Only After Approval
 
 Never run full collection until:
 

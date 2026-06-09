@@ -17,6 +17,7 @@ Is this public dataset collectible enough to justify building a pipeline?
 ## What It Does
 
 - Converts vague data asks into a concrete `DatasetSpec`
+- Designs the actual dataset need before collection: decision, grain, fields, freshness, history, coverage, join keys, and exclusions
 - Finds public APIs and storefront/page-data endpoints
 - Derives endpoint templates, query params, headers, and pagination behavior
 - Probes limits with tiny requests before broad collection
@@ -50,6 +51,28 @@ Every serious feasibility report should make the decision obvious:
 | Traffic light | Green, Yellow, or Red |
 
 Green means build the pipeline. Yellow means sample, narrow, or find another route. Red means stop.
+
+## Modes
+
+Use modes to keep Codex from overbuilding:
+
+| Mode | Use It When |
+|---|---|
+| Dataset Design | You know the business goal but not the exact data needed |
+| Feasibility | You named a dataset and need to know whether it is collectible |
+| Endpoint Discovery | You want public APIs, XHR/fetch routes, feeds, sitemaps, or embedded JSON |
+| Pagination/Limits | You need to know how many rows are actually reachable |
+| Source Comparison | Multiple routes might work and you need the tradeoff |
+| Pipeline Design | Sources are known and you want a refreshable plan |
+| Sample Validation | You want tiny probes and sample rows |
+| Compliance Boundary | You want Green/Yellow/Red stop conditions |
+| Execution | You explicitly approved collection beyond samples |
+
+Default ladder:
+
+```text
+Dataset Design -> Feasibility -> Endpoint Discovery -> Pagination/Limits -> Pipeline Design -> Sample Validation -> Execution
+```
 
 ## 15-Second Demo
 
@@ -142,6 +165,10 @@ More examples live in [PROMPTS.md](PROMPTS.md).
 
 - [Macy's product metadata](case-studies/macys.md): category sitemap to public XAPI, with full catalog-check notes.
 - [Wattpad followers/following](case-studies/wattpad.md): public endpoint discovery with pagination caps and responsible feasibility scoring.
+- [Retail price intelligence](case-studies/retail-price-intelligence.md): using Dataset Design Mode to avoid collecting the wrong catalog data.
+- [Public events](case-studies/public-events.md): designing an event table before choosing feeds, JSON-LD, or search endpoints.
+- [Public jobs](case-studies/public-jobs.md): source comparison for career pages, ATS boards, sitemaps, and embedded JSON.
+- [Marketplace inventory](case-studies/marketplace-inventory.md): pagination/limits thinking for "all listings" asks.
 
 ## Skill Layout
 
@@ -151,6 +178,7 @@ agents/
   openai.yaml
 references/
   workflow.md
+  modes.md
   endpoint-discovery.md
   probing.md
   feasibility-scoring.md
@@ -162,6 +190,10 @@ references/
 case-studies/
   macys.md
   wattpad.md
+  retail-price-intelligence.md
+  public-events.md
+  public-jobs.md
+  marketplace-inventory.md
 PROMPTS.md
 CONTRIBUTING.md
 LICENSE
