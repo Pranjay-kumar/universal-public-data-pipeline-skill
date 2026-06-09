@@ -110,6 +110,7 @@ The useful result is not "here is a scraper." The useful result is:
 |---|---|---|---|
 | Macy's product metadata | Category sitemap -> public category XAPI -> product detail XAPI | Category grids and product IDs are publicly discoverable; dedupe needed across categories | Green |
 | Wattpad followers/following | Public user graph API | Followers on popular accounts appear publicly capped near a deep offset; following behaves differently | Yellow |
+| StreetEasy listings | Public search-page JSON-LD plus sitemap indexes | Child listing sitemap files returned 403; robots disallows key detail/API paths | Yellow |
 
 ## Public API Pattern Library
 
@@ -188,6 +189,7 @@ More examples live in [PROMPTS.md](PROMPTS.md).
 - [Macy's product metadata](case-studies/macys.md): category sitemap to public XAPI, with full catalog-check notes.
 - [Wattpad followers/following](case-studies/wattpad.md): public endpoint discovery with pagination caps and responsible feasibility scoring.
 - [Greenhouse and Lever public job boards](case-studies/greenhouse-lever-jobs.md): ATS public APIs, provider-specific pagination, and hiring-signal pipeline design.
+- [StreetEasy public real estate listings](case-studies/streeteasy.md): JSON-LD and sitemap discovery with a clear Yellow boundary around 403s and disallowed routes.
 
 Only publish case studies after using the skill on a real target and recording probe-backed evidence. Keep hypothetical examples in `PROMPTS.md` or `references/examples.md`, not in `case-studies/`.
 
@@ -213,6 +215,7 @@ case-studies/
   macys.md
   wattpad.md
   greenhouse-lever-jobs.md
+  streeteasy.md
 PROMPTS.md
 CONTRIBUTING.md
 LICENSE
