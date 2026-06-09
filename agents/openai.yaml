@@ -1,0 +1,4 @@
+interface:
+  display_name: "Universal Public Data Pipeline"
+  short_description: "Discover public APIs and data pipelines"
+  default_prompt: "Use $universal-public-data-pipeline to discover public web/API data sources, assess feasibility, and plan a reusable data pipeline."
