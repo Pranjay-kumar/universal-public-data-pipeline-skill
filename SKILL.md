@@ -52,6 +52,7 @@ Load only the references needed for the request:
 - For common public API archetypes and discovery patterns, read `references/pattern-library.md`.
 - For reverse-engineering public APIs and page-data routes, read `references/endpoint-discovery.md`.
 - For probing sources, headers, params, pagination, and limits, read `references/probing.md`.
+- For Playwright or rendered-DOM fallback, read `references/playwright-rendered-dom.md`.
 - For scoring and communicating feasibility, read `references/feasibility-scoring.md`.
 - For allowed and disallowed behavior, read `references/compliance-boundaries.md`.
 - For choosing source strategies, read `references/source-strategies.md`.
@@ -62,6 +63,7 @@ Load only the references needed for the request:
 
 - Prefer public structured endpoints over HTML parsing.
 - Prefer endpoint templates, pagination params, and stable IDs over browser automation.
+- Use Playwright/rendered DOM only after public APIs, feeds, sitemaps, embedded JSON, and static HTML fail or are insufficient.
 - Treat every ask as due diligence before implementation: answer "should we do this?" before "how do we code it?"
 - Treat vague "all data" requests as dataset-design problems before source discovery.
 - Use normal browser-style headers only when needed for public unauthenticated responses.

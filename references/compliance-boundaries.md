@@ -16,6 +16,7 @@ Use public data only. Do not escalate access.
 - Documentation pages
 - Public media, business, event, ecommerce, and catalog metadata
 - Normal browser-style headers when needed for ordinary public responses
+- Playwright or rendered-browser sampling for public pages when lower-cost public data routes fail
 - Rate-limit detection and compliant throughput planning
 
 ## Disallowed
@@ -27,6 +28,7 @@ Use public data only. Do not escalate access.
 - Private account access
 - Credential or stored-cookie use
 - Browser fingerprint evasion
+- Stealth plugins or browser settings intended to defeat bot detection
 - Header spoofing intended to bypass security, bot controls, geography locks, or access decisions
 - Hidden accounts
 - Exploit generation
@@ -56,4 +58,3 @@ Public does not automatically mean low-risk. For social graphs, followers, follo
 - report privacy and ToS risks
 - separate technical feasibility from responsible full-collection feasibility
 - require explicit approval for broad collection
-

@@ -69,7 +69,9 @@ Use only when structured endpoints are unavailable. Prefer robust selectors and 
 
 ## Rendered DOM
 
-Use only when the data requires JavaScript rendering and no public endpoint or embedded JSON is available. Keep samples small and document the cost.
+Use only when the data requires JavaScript rendering and no public endpoint, feed, sitemap, embedded JSON, or static HTML route is sufficient. Prefer Playwright for tiny bounded probes and evidence capture.
+
+Read `playwright-rendered-dom.md` before using this strategy.
 
 ## Reject
 

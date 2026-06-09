@@ -6,6 +6,8 @@ This Codex skill turns public-data requests into due-diligence reports and reusa
 
 It is balanced about feasibility. If a source works, it says so. If the data is partial, rate-limited, risky, blocked, or not worth collecting, it says that too.
 
+The skill is also portable to Claude-style skill folders because the core artifact is a standard `SKILL.md` plus markdown references.
+
 The core question is not "can we scrape this?"
 
 The core question is:
@@ -21,6 +23,7 @@ Is this public dataset collectible enough to justify building a pipeline?
 - Finds public APIs and storefront/page-data endpoints
 - Derives endpoint templates, query params, headers, and pagination behavior
 - Probes limits with tiny requests before broad collection
+- Uses Playwright/rendered DOM as a bounded last resort when no public structured route works
 - Scores technical and responsible collection feasibility with Green/Yellow/Red status
 - Produces a data acquisition memo: fastest route, cheapest robust route, highest-coverage route, trapdoors, and stop conditions
 - Designs reusable pipeline plans with validation and approval gates
@@ -123,6 +126,14 @@ The skill teaches Codex to recognize common public data routes before falling ba
 - mobile API mirrors
 - search, autocomplete, feed, and listing endpoints
 
+## Playwright Fallback
+
+Playwright is allowed, but it is not the first move.
+
+Use it only when public APIs, feeds, sitemaps, embedded JSON, and static HTML are unavailable or incomplete. A Playwright probe should stay tiny, inspect network traffic for public structured routes, capture evidence, and fall back to DOM extraction only when needed.
+
+No login cookies, CAPTCHA solving, stealth plugins, fingerprint evasion, or rate-limit bypass.
+
 ## Install
 
 Clone the repo:
@@ -140,6 +151,17 @@ Copy-Item -Recurse ".\universal-public-data-pipeline-skill" $dest
 ```
 
 Restart Codex or start a new thread so the skill metadata is loaded.
+
+Install into Claude Code skills:
+
+```powershell
+$dest = "$env:USERPROFILE\.claude\skills\universal-public-data-pipeline"
+if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\skills" | Out-Null
+Copy-Item -Recurse ".\universal-public-data-pipeline-skill" $dest
+```
+
+Claude.ai custom skills can also use the same folder contents: `SKILL.md`, `references/`, `case-studies/`, and supporting docs.
 
 ## Try These Prompts
 
@@ -185,6 +207,7 @@ references/
   source-strategies.md
   output-contracts.md
   pattern-library.md
+  playwright-rendered-dom.md
   examples.md
 case-studies/
   macys.md

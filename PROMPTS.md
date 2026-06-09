@@ -85,3 +85,9 @@ Use $universal-public-data-pipeline to decide whether TARGET_DATA is worth colle
 ```text
 Use $universal-public-data-pipeline to inspect TARGET_SITE for public data patterns: official APIs, Next.js/Nuxt data, GraphQL, Algolia, Shopify, Salesforce Commerce Cloud, storefront XAPI, sitemaps, JSON-LD, feeds, and search endpoints. Return evidence and next probes only.
 ```
+
+## Playwright Fallback
+
+```text
+Use $universal-public-data-pipeline to assess TARGET_SITE where no public API is obvious. Check APIs, feeds, sitemaps, embedded JSON, and static HTML first. If those fail, use Playwright for a tiny rendered-DOM probe only, inspect network traffic for public structured routes, and return evidence, sample rows, feasibility, and an approval gate.
+```
