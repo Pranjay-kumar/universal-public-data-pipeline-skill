@@ -5,17 +5,29 @@ description: Trigger when the user wants to collect, structure, evaluate, crawl,
 
 # Universal Data Acquisition Pipeline
 
-Act as a world-class data acquisition engineer and feasibility analyst. Design robust, refreshable scraping and API pipelines that are honest about source access, reliability, compliance, cost, and data quality. Be aggressive in discovering structured routes such as official APIs, XHR/fetch endpoints, embedded JSON, sitemaps, catalogs, page-data, and browser network calls because endpoint-first collection is usually the fastest and most reliable path. Be balanced and explicit in feasibility reports: state what works, what is uncertain, what is blocked, what requires authorization, what is not worth doing, and what should not be attempted.
+Act as the router for a data acquisition skill tree. Classify the request, select the narrowest child skill, and keep outputs aligned with shared core contracts. Design robust, refreshable scraping and API pipelines that are honest about source access, reliability, compliance, cost, and data quality.
 
 Do not scrape immediately. First classify the source access, prove that a reliable data path exists, design a reusable pipeline, validate a small sample, and require approval before any full run.
+
+## Skill Tree
+
+Use the child skill that best matches the request:
+
+- `data-acquisition-core`: shared contracts, access classes, compliance, scorecards, output schemas, and pipeline quality standards.
+- `data-acquisition-design`: DatasetNeed, DatasetSpec, scope control, and "what data do we actually need?"
+- `data-acquisition-feasibility`: feasibility scoring, source comparison, Green/Yellow/Red decisions, and approval gates.
+- `data-acquisition-discovery`: endpoint discovery, public APIs, GraphQL, XHR/fetch, sitemaps, embedded JSON, and pagination probes.
+- `data-acquisition-browser`: Playwright, rendered DOM, browser network capture, and authorized owned-session probes.
+- `data-acquisition-pipeline`: production pipeline architecture, `pipeline.yaml`, raw/staged/normalized layers, quality gates, and run reports.
+- `data-acquisition-publish`: probe-backed case studies and publishable/non-publishable result packaging.
 
 ## Modes
 
 Select the narrowest useful mode from the user's request. Default to `dataset-design` when the user is still unsure what data they need, and `feasibility` when they already named a dataset.
 
 1. `dataset-design`: clarify the decision, entity grain, required fields, freshness, history, coverage, joins, exclusions, and uselessness criteria before source discovery.
-2. `feasibility`: decide whether the requested public dataset is collectible enough to justify a pipeline.
-3. `endpoint-discovery`: hunt public APIs, XHR/fetch routes, page-data, feeds, sitemaps, and embedded JSON.
+2. `feasibility`: decide whether the requested dataset is collectible enough to justify a pipeline.
+3. `endpoint-discovery`: hunt APIs, XHR/fetch routes, page-data, feeds, sitemaps, and embedded JSON.
 4. `pagination-limits`: prove page size, cursor/offset depth, terminal behavior, caps, sort stability, and completeness ceiling.
 5. `source-comparison`: compare official API, public XAPI, sitemap plus detail, embedded JSON, HTML, rendered DOM, and reject paths.
 6. `pipeline-design`: convert known sources into a refreshable pipeline plan without broad collection.
@@ -48,21 +60,21 @@ Never return raw code alone. The user wants a decision and an engineering design
 
 ## Reference Map
 
-Load only the references needed for the request:
+Load only the shared core references needed for the request from `skills/data-acquisition-core/references/`, or delegate mentally to the matching child skill:
 
-- For the overall process, read `references/workflow.md`.
-- For mode selection, read `references/modes.md`.
-- For source access classes and authenticated/owned-session rules, read `references/source-access.md`.
-- For common public API archetypes and discovery patterns, read `references/pattern-library.md`.
-- For reverse-engineering public APIs and page-data routes, read `references/endpoint-discovery.md`.
-- For probing sources, headers, params, pagination, and limits, read `references/probing.md`.
-- For Playwright or rendered-DOM fallback, read `references/playwright-rendered-dom.md`.
-- For production-grade scraper/pipeline architecture, read `references/pipeline-engineering.md`.
-- For scoring and communicating feasibility, read `references/feasibility-scoring.md`.
-- For allowed and disallowed behavior, read `references/compliance-boundaries.md`.
-- For choosing source strategies, read `references/source-strategies.md`.
-- For required final artifacts and schemas, read `references/output-contracts.md`.
-- For examples and response shapes, read `references/examples.md`.
+- Overall process: `skills/data-acquisition-core/references/workflow.md`
+- Mode selection: `skills/data-acquisition-core/references/modes.md`
+- Source access and owned-session rules: `skills/data-acquisition-core/references/source-access.md`
+- API/source discovery patterns: `skills/data-acquisition-core/references/pattern-library.md`
+- Endpoint discovery: `skills/data-acquisition-core/references/endpoint-discovery.md`
+- Probing and pagination: `skills/data-acquisition-core/references/probing.md`
+- Playwright/rendered DOM: `skills/data-acquisition-core/references/playwright-rendered-dom.md`
+- Pipeline engineering: `skills/data-acquisition-core/references/pipeline-engineering.md`
+- Feasibility scoring: `skills/data-acquisition-core/references/feasibility-scoring.md`
+- Compliance: `skills/data-acquisition-core/references/compliance-boundaries.md`
+- Source strategies: `skills/data-acquisition-core/references/source-strategies.md`
+- Output contracts: `skills/data-acquisition-core/references/output-contracts.md`
+- Examples: `skills/data-acquisition-core/references/examples.md`
 
 ## Default Posture
 

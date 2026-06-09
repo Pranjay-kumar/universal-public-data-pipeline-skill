@@ -1,10 +1,10 @@
 # Endpoint Discovery
 
-Use this when a public website may expose structured data through APIs, XHR/fetch calls, page-data routes, script bundles, or embedded JSON.
+Use this when a website or app may expose structured data through APIs, XHR/fetch calls, page-data routes, script bundles, or embedded JSON.
 
 ## Goal
 
-Find the fastest public unauthenticated data path. Prefer structured endpoint responses over HTML scraping.
+Find the fastest allowed data path for the source access class. Prefer structured endpoint responses over HTML scraping.
 
 ## Discovery Tactics
 
@@ -91,4 +91,3 @@ Stop and lower feasibility if the path requires:
 - rate-limit bypass
 
 Rate limits may be detected and respected. Design with backoff, caching, incremental writes, dedupe, and approval gates.
-

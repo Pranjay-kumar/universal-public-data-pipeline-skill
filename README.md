@@ -74,20 +74,18 @@ Green means build the pipeline. Yellow means sample, narrow, or find another rou
 
 ## Modes
 
-Use modes to keep Codex from overbuilding:
+Use the router skill or call a focused child skill directly:
 
-| Mode | Use It When |
+| Skill | Use It When |
 |---|---|
-| Dataset Design | You know the business goal but not the exact data needed |
-| Feasibility | You named a dataset and need to know whether it is collectible |
-| Endpoint Discovery | You want public APIs, XHR/fetch routes, feeds, sitemaps, or embedded JSON |
-| Pagination/Limits | You need to know how many rows are actually reachable |
-| Source Comparison | Multiple routes might work and you need the tradeoff |
-| Pipeline Design | Sources are known and you want a refreshable plan |
-| Sample Validation | You want tiny probes and sample rows |
-| Compliance Boundary | You want Green/Yellow/Red stop conditions |
-| Owned Session | You want to use your own authorized login/session without publishing it as public data |
-| Execution | You explicitly approved collection beyond samples |
+| `universal-data-acquisition-pipeline` | Router for the whole acquisition workflow |
+| `data-acquisition-core` | Shared contracts, source access, compliance, output schemas |
+| `data-acquisition-design` | You know the business goal but not the exact data needed |
+| `data-acquisition-feasibility` | You named a dataset and need to know whether it is collectible |
+| `data-acquisition-discovery` | You want APIs, XHR/fetch routes, feeds, sitemaps, or embedded JSON |
+| `data-acquisition-browser` | You need Playwright, rendered DOM, network capture, or owned-session browser probes |
+| `data-acquisition-pipeline` | Sources are known and you want a production-grade pipeline |
+| `data-acquisition-publish` | You want to publish real probe-backed results |
 
 Default ladder:
 
@@ -188,9 +186,7 @@ git clone https://github.com/Pranjay-kumar/universal-data-acquisition-pipeline-s
 Install into Codex skills:
 
 ```powershell
-$dest = "$env:USERPROFILE\.codex\skills\universal-data-acquisition-pipeline"
-if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
-Copy-Item -Recurse ".\universal-data-acquisition-pipeline-skill" $dest
+.\scripts\install_skills.ps1 -Target codex
 ```
 
 Restart Codex or start a new thread so the skill metadata is loaded.
@@ -198,13 +194,10 @@ Restart Codex or start a new thread so the skill metadata is loaded.
 Install into Claude Code skills:
 
 ```powershell
-$dest = "$env:USERPROFILE\.claude\skills\universal-data-acquisition-pipeline"
-if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\skills" | Out-Null
-Copy-Item -Recurse ".\universal-data-acquisition-pipeline-skill" $dest
+.\scripts\install_skills.ps1 -Target claude
 ```
 
-Claude.ai custom skills can also use the same folder contents: `SKILL.md`, `references/`, `case-studies/`, and supporting docs.
+Claude.ai custom skills can also use the same folder contents: `SKILL.md`, `skills/`, `case-studies/`, and supporting docs.
 
 ## Try These Prompts
 
@@ -233,7 +226,7 @@ More examples live in [PROMPTS.md](PROMPTS.md).
 - [Greenhouse and Lever public job boards](case-studies/greenhouse-lever-jobs.md): ATS public APIs, provider-specific pagination, and hiring-signal pipeline design.
 - [StreetEasy public real estate listings](case-studies/streeteasy.md): JSON-LD and sitemap discovery with a clear Yellow boundary around 403s and disallowed routes.
 
-Only publish case studies after using the skill on a real target and recording probe-backed evidence. Keep hypothetical examples in `PROMPTS.md` or `references/examples.md`, not in `case-studies/`.
+Only publish case studies after using the skill on a real target and recording probe-backed evidence. Keep hypothetical examples in `PROMPTS.md` or `skills/data-acquisition-core/references/examples.md`, not in `case-studies/`.
 
 ## Skill Layout
 
@@ -241,20 +234,37 @@ Only publish case studies after using the skill on a real target and recording p
 SKILL.md
 agents/
   openai.yaml
-references/
-  workflow.md
-  modes.md
-  source-access.md
-  endpoint-discovery.md
-  probing.md
-  feasibility-scoring.md
-  compliance-boundaries.md
-  source-strategies.md
-  output-contracts.md
-  pattern-library.md
-  playwright-rendered-dom.md
-  pipeline-engineering.md
-  examples.md
+skills/
+  data-acquisition-core/
+    SKILL.md
+    references/
+      workflow.md
+      modes.md
+      source-access.md
+      endpoint-discovery.md
+      probing.md
+      feasibility-scoring.md
+      compliance-boundaries.md
+      source-strategies.md
+      output-contracts.md
+      pattern-library.md
+      playwright-rendered-dom.md
+      pipeline-engineering.md
+      examples.md
+  data-acquisition-design/
+    SKILL.md
+  data-acquisition-feasibility/
+    SKILL.md
+  data-acquisition-discovery/
+    SKILL.md
+  data-acquisition-browser/
+    SKILL.md
+    scripts/
+      playwright_probe.mjs
+  data-acquisition-pipeline/
+    SKILL.md
+  data-acquisition-publish/
+    SKILL.md
 case-studies/
   macys.md
   wattpad.md
@@ -265,10 +275,10 @@ CONTRIBUTING.md
 LICENSE
 package.json
 scripts/
-  playwright_probe.mjs
+  install_skills.ps1
 ```
 
-`SKILL.md` stays short so Codex can trigger the skill cheaply. The detailed behavior lives in reference files that Codex loads only when needed.
+The router `SKILL.md` stays short so Codex can trigger cheaply. Shared contracts live in `skills/data-acquisition-core/`; focused child skills reference that core instead of duplicating it.
 
 ## The Core Idea
 

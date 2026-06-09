@@ -1,10 +1,10 @@
 # Source Strategies
 
-Pick the fastest reliable public strategy that fits the dataset.
+Pick the fastest reliable strategy that fits the dataset and source access class.
 
 ## Official Public API
 
-Use when docs and unauthenticated or approved public access exist. Prefer it over reverse-engineered endpoints.
+Use when docs and unauthenticated, licensed, partner, or otherwise approved access exists. Prefer it over reverse-engineered endpoints.
 
 Watch for:
 
@@ -75,7 +75,7 @@ Read `playwright-rendered-dom.md` before using this strategy.
 
 ## Reject
 
-Reject or lower feasibility when data requires private access, evasion, CAPTCHA solving, auth bypass, or rate-limit bypass.
+Reject or lower feasibility when data requires unauthorized private access, evasion, CAPTCHA solving, auth bypass, or rate-limit bypass.
 
 ## Strategy Recommendation Language
 

@@ -5,3 +5,6 @@ storage-state*.json
 *.storageState.json
 playwright-probe-report.json
 playwright-probe-report.png
+skills/*/node_modules/
+skills/*/outputs/
+skills/*/auth/
