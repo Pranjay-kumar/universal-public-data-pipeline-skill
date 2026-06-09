@@ -135,6 +135,21 @@ Use it only when public APIs, feeds, sitemaps, embedded JSON, and static HTML ar
 
 No login cookies, CAPTCHA solving, stealth plugins, fingerprint evasion, or rate-limit bypass.
 
+Optional setup:
+
+```powershell
+npm install
+npx playwright install chromium
+```
+
+Run a tiny public-page probe:
+
+```powershell
+npm run probe:playwright -- "https://example.com/public-page" "outputs/example-playwright-probe.json"
+```
+
+The helper writes a JSON report and screenshot, including network requests, structured JSON/API-looking responses, JSON-LD snippets, candidate links, console messages, and probe bounds.
+
 ## Install
 
 Clone the repo:
@@ -219,6 +234,9 @@ case-studies/
 PROMPTS.md
 CONTRIBUTING.md
 LICENSE
+package.json
+scripts/
+  playwright_probe.mjs
 ```
 
 `SKILL.md` stays short so Codex can trigger the skill cheaply. The detailed behavior lives in reference files that Codex loads only when needed.

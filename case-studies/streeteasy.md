@@ -181,9 +181,16 @@ Playwright note:
 ```json
 {
   "attempted": true,
-  "result": "not_run",
-  "reason": "The local Node runtime did not have Playwright installed: Module not found: playwright.",
-  "impact": "No rendered-browser network evidence was added to this case study."
+  "result": "blocked",
+  "status": 403,
+  "title": "Access to this page has been denied",
+  "body_text_start": "Press & Hold to confirm you are a human (and not a bot).",
+  "network_signals": [
+    "PerimeterX challenge scripts loaded from px-cloud.net",
+    "captcha.js loaded from streeteasy.com/cZdhF737/captcha/captcha.js",
+    "no listing JSON-LD was available in the rendered challenge page"
+  ],
+  "impact": "Rendered-browser fallback confirmed the access-control boundary. Do not use stealth, CAPTCHA solving, fingerprint evasion, or cookies to proceed."
 }
 ```
 
@@ -287,9 +294,8 @@ Playwright note:
     "direct HTTP access became 403 after small probes"
   ],
   "sample_before_full_run": [
-    "run a proper Playwright probe in an environment with Playwright installed",
-    "capture network requests for one public search page",
-    "verify whether JSON-LD pagination is accessible without disallowed routes",
+    "repeat Playwright probe only for documentation if needed",
+    "verify whether a different public, allowed page exposes JSON-LD without challenge",
     "avoid detail routes and API paths disallowed by robots"
   ],
   "stop_conditions": [
@@ -316,7 +322,7 @@ Playwright note:
   "runtime": "Small samples are practical. Full runs are not recommended from current evidence.",
   "storage": "Simple if limited to JSON-LD samples or content sitemaps.",
   "risk": "Medium because robots disallows sale/rental detail and API paths and probes encountered 403s.",
-  "recommended_strategy": "Use this as a source-comparison/compliance-boundary case study. Do not build a broad StreetEasy listing pipeline unless a later Playwright/network probe finds a clearly public, allowed structured route.",
+  "recommended_strategy": "Use this as a source-comparison/compliance-boundary case study. Do not build a broad StreetEasy listing pipeline from this route; Playwright confirmed a human-verification boundary.",
   "confidence": 0.78
 }
 ```
@@ -368,7 +374,7 @@ approval:
 {
   "sample_validated": true,
   "full_run_approved": false,
-  "recommended_next_step": "Install/run Playwright in a clean environment for one public search page to capture network evidence. Continue only if a clearly public, allowed structured route appears."
+  "recommended_next_step": "Stop broad collection. If StreetEasy remains important, look for official/licensed data access or a different public source such as open city property datasets."
 }
 ```
 

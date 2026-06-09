@@ -76,6 +76,14 @@ Increase only after explicit approval.
 
 ## Implementation Notes
 
+- If this repo is available locally, prefer the bundled helper:
+
+```bash
+npm install
+npx playwright install chromium
+npm run probe:playwright -- "https://example.com/public-page" outputs/example-playwright-probe.json
+```
+
 - Use normal Playwright defaults. Do not add stealth plugins, fingerprint spoofing, CAPTCHA solvers, private cookies, or authenticated browser state.
 - Prefer network-discovered public endpoints over DOM selectors whenever possible.
 - Keep selectors semantic when possible: links, headings, JSON-LD, visible cards, table rows, accessible labels.
