@@ -36,11 +36,23 @@ Generate a ranked `SourcePlan`. Prefer:
 
 Do not start with browser automation unless lower-cost paths fail.
 
+Use the probe ladder:
+
+1. Official API docs, open-data portals, feeds, or bulk files
+2. Robots, sitemap indexes, category/product sitemaps, directories
+3. Framework page data such as Next.js, Nuxt, Remix, or JSON-LD
+4. XHR/fetch endpoints visible in public page behavior
+5. Search, browse, autocomplete, facet, and listing endpoints
+6. Detail endpoints derived from public IDs or URLs
+7. Static HTML parsing
+8. Rendered DOM automation
+9. Reject or seek another source
+
 ## 3. Reverse-Engineer Public Endpoints
 
 Treat endpoint discovery as the preferred fast path. Derive endpoint templates, params, headers, pagination, field mapping, and fallback routes before writing a scraper.
 
-Read `endpoint-discovery.md` and `probing.md` when public web/API routes are likely.
+Read `pattern-library.md`, `endpoint-discovery.md`, and `probing.md` when public web/API routes are likely.
 
 ## 4. Probe Before Planning Execution
 
@@ -63,7 +75,19 @@ Create a balanced `FeasibilityReport`. Be enthusiastic when the path works, but 
 
 Read `feasibility-scoring.md`.
 
-## 6. Design The Pipeline
+## 6. Produce A Data Acquisition Memo
+
+Before implementation, make the decision legible:
+
+- fastest viable route
+- cheapest robust route
+- highest-coverage route
+- likely completeness ceiling
+- probe evidence still needed
+- reasons to stop or narrow scope
+- recommended next move
+
+## 7. Design The Pipeline
 
 Create a `PipelinePlan` with:
 
@@ -79,7 +103,7 @@ Create a `PipelinePlan` with:
 - validation plan
 - full-run approval gate
 
-## 7. Validate Small
+## 8. Validate Small
 
 Before any full run, validate a small sample by default:
 
@@ -89,7 +113,7 @@ Before any full run, validate a small sample by default:
 
 Increase only when the user approves. Full runs must write incrementally so partial output survives timeouts.
 
-## 8. Execute Only After Approval
+## 9. Execute Only After Approval
 
 Never run full collection until:
 
@@ -97,4 +121,3 @@ Never run full collection until:
 - source and endpoint probes are documented
 - sample output is validated
 - approval is explicit
-

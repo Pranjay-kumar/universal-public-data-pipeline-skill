@@ -75,3 +75,12 @@ Use only when the data requires JavaScript rendering and no public endpoint or e
 
 Reject or lower feasibility when data requires private access, evasion, CAPTCHA solving, auth bypass, or rate-limit bypass.
 
+## Strategy Recommendation Language
+
+For every serious data request, name three routes even if two are inferior:
+
+- `fastest viable route`: quickest way to prove and collect useful rows
+- `cheapest robust route`: simplest refreshable design with the least moving parts
+- `highest coverage route`: path most likely to maximize completeness, even if slower
+
+Then choose one recommended route and explain why.

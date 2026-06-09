@@ -4,7 +4,7 @@ Be balanced in feasibility reports. The skill should be aggressive while discove
 
 ## Score Dimensions
 
-Score 0-100 from:
+Score 0-100 overall and 0-10 for the scorecard dimensions:
 
 - Availability: Does the data exist publicly?
 - Accessibility: Can it be reached without credentials or restricted actions?
@@ -17,7 +17,15 @@ Score 0-100 from:
 - Stability: Are endpoint templates and params stable?
 - Compliance: Are robots, terms, privacy, and access boundaries acceptable?
 
-## Interpretation
+## Traffic Light
+
+- `Green`: public, stable, unauthenticated, structured, refreshable, and likely complete enough.
+- `Yellow`: public but partial, capped, rate-limited, brittle, expensive, or unclear.
+- `Red`: requires auth bypass, private cookies/tokens, CAPTCHA solving, fingerprint evasion, private account access, exploit behavior, or rate-limit bypass.
+
+Reject Red paths. For Yellow paths, recommend a smaller sample, alternate source, or narrower dataset before any full run.
+
+## Overall Interpretation
 
 - `90-100`: Easy
 - `70-89`: Feasible
@@ -38,6 +46,7 @@ Use an explicit posture:
 ```json
 {
   "score": 0,
+  "traffic_light": "Green|Yellow|Red",
   "interpretation": "",
   "availability": "",
   "accessibility": "",
@@ -49,6 +58,37 @@ Use an explicit posture:
   "risk": "",
   "recommended_strategy": "",
   "confidence": 0.0
+}
+```
+
+## Required FeasibilityScorecard
+
+```json
+{
+  "coverage": 0,
+  "stability": 0,
+  "pagination_depth": 0,
+  "refreshability": 0,
+  "data_quality": 0,
+  "engineering_cost": "S|M|L|XL",
+  "legal_tos_risk": "low|medium|high",
+  "recommended_path": "official_api|public_xapi|embedded_json|sitemap_plus_detail|html|rendered_dom|reject",
+  "traffic_light": "Green|Yellow|Red"
+}
+```
+
+## Required DataAcquisitionMemo
+
+```json
+{
+  "fastest_viable_route": "",
+  "cheapest_robust_route": "",
+  "highest_coverage_route": "",
+  "coverage_ceiling": "",
+  "main_trapdoors": [],
+  "sample_before_full_run": [],
+  "stop_conditions": [],
+  "recommendation": ""
 }
 ```
 
@@ -65,4 +105,3 @@ When a source is technically reachable but risky or partial, separate scores:
 ```
 
 Use this for social graphs, user-generated content, personal profiles, rate-limited sources, and any dataset with privacy or terms concerns.
-

@@ -1,4 +1,4 @@
 interface:
   display_name: "Universal Public Data Pipeline"
-  short_description: "Discover public APIs and data pipelines"
-  default_prompt: "Use $universal-public-data-pipeline to discover public web/API data sources, assess feasibility, and plan a reusable data pipeline."
+  short_description: "Run public data due diligence before building scrapers"
+  default_prompt: "Use $universal-public-data-pipeline to prove the public data path, score feasibility, identify trapdoors, and plan a reusable pipeline before any full collection."

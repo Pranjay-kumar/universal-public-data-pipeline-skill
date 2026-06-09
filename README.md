@@ -1,10 +1,18 @@
 # Universal Public Data Pipeline Skill
 
-Find the hidden public API before you scrape.
+Stop writing scrapers. First, prove the data path.
 
-This Codex skill turns public-data requests into feasibility reports and reusable pipeline plans. It is aggressive about discovering public APIs, XHR endpoints, page-data routes, sitemaps, catalogs, and embedded JSON because structured endpoints are usually faster, cleaner, and less brittle than HTML scraping.
+This Codex skill turns public-data requests into due-diligence reports and reusable pipeline plans. It is aggressive about discovering public APIs, XHR endpoints, page-data routes, sitemaps, catalogs, and embedded JSON because structured endpoints are usually faster, cleaner, and less brittle than HTML scraping.
 
 It is balanced about feasibility. If a source works, it says so. If the data is partial, rate-limited, risky, blocked, or not worth collecting, it says that too.
+
+The core question is not "can we scrape this?"
+
+The core question is:
+
+```text
+Is this public dataset collectible enough to justify building a pipeline?
+```
 
 ## What It Does
 
@@ -12,9 +20,10 @@ It is balanced about feasibility. If a source works, it says so. If the data is 
 - Finds public APIs and storefront/page-data endpoints
 - Derives endpoint templates, query params, headers, and pagination behavior
 - Probes limits with tiny requests before broad collection
-- Scores technical and responsible collection feasibility
+- Scores technical and responsible collection feasibility with Green/Yellow/Red status
+- Produces a data acquisition memo: fastest route, cheapest robust route, highest-coverage route, trapdoors, and stop conditions
 - Designs reusable pipeline plans with validation and approval gates
-- Produces consistent outputs: `SourcePlan`, `EndpointPlan`, `HeaderProfile`, `ProbeResults`, `FeasibilityReport`, `PipelinePlan`, `SampleRows`, and `ApprovalGate`
+- Produces consistent outputs: `SourcePlan`, `EndpointPlan`, `HeaderProfile`, `ProbeResults`, `FeasibilityScorecard`, `DataAcquisitionMemo`, `FeasibilityReport`, `PipelinePlan`, `SampleRows`, and `ApprovalGate`
 
 ## What It Refuses
 
@@ -23,6 +32,24 @@ This skill is for public data only.
 It does not do auth bypass, paywall bypass, CAPTCHA solving, private account access, credential or cookie use, fingerprint evasion, exploit generation, or rate-limit bypass.
 
 It can detect limits and design within them using backoff, caching, checkpointing, sampling, dedupe, and explicit approval gates.
+
+## The Scorecard
+
+Every serious feasibility report should make the decision obvious:
+
+| Dimension | Meaning |
+|---|---|
+| Coverage | How much of the requested dataset appears reachable |
+| Stability | How brittle the route looks |
+| Pagination depth | Whether public pagination reaches the target scale |
+| Refreshability | Whether the pipeline can run repeatedly |
+| Data quality | Whether fields are complete and normalized enough |
+| Engineering cost | S, M, L, or XL |
+| Legal/ToS risk | low, medium, or high |
+| Recommended path | official API, public XAPI, embedded JSON, sitemap plus detail, HTML, rendered DOM, or reject |
+| Traffic light | Green, Yellow, or Red |
+
+Green means build the pipeline. Yellow means sample, narrow, or find another route. Red means stop.
 
 ## 15-Second Demo
 
@@ -44,10 +71,34 @@ The useful result is not "here is a scraper." The useful result is:
 - the endpoint templates
 - the params and headers that matter
 - the page and category limits
+- the feasibility scorecard
+- the data acquisition memo
 - sample rows
 - a feasibility score
 - a reusable pipeline plan
 - an approval gate before a full run
+
+## Case Study Snapshot
+
+| Target | Best Source Found | Pagination/Coverage Signal | Feasibility |
+|---|---|---|---|
+| Macy's product metadata | Category sitemap -> public category XAPI -> product detail XAPI | Category grids and product IDs are publicly discoverable; dedupe needed across categories | Green |
+| Wattpad followers/following | Public user graph API | Followers on popular accounts appear publicly capped near a deep offset; following behaves differently | Yellow |
+
+## Public API Pattern Library
+
+The skill teaches Codex to recognize common public data routes before falling back to HTML:
+
+- Next.js and Nuxt page data
+- GraphQL and persisted queries
+- Algolia indices
+- Shopify product/catalog JSON
+- Salesforce Commerce Cloud APIs
+- Storefront XAPI and BFF routes
+- sitemap-to-detail enrichment
+- JSON-LD and hydration state
+- mobile API mirrors
+- search, autocomplete, feed, and listing endpoints
 
 ## Install
 
@@ -106,6 +157,7 @@ references/
   compliance-boundaries.md
   source-strategies.md
   output-contracts.md
+  pattern-library.md
   examples.md
 case-studies/
   macys.md
@@ -121,7 +173,6 @@ LICENSE
 
 Most public websites already fetch structured data for normal users.
 
-The job is to find that public data path, prove it works, understand its limits, and only then build the pipeline.
+The job is to find that public data path, prove it works, understand its limits, decide whether the collection is worth doing, and only then build the pipeline.
 
 Scraping HTML first is usually the slow path.
-

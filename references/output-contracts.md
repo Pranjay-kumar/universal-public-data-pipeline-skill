@@ -75,6 +75,57 @@ Every run should produce structured outputs.
 ]
 ```
 
+## FeasibilityScorecard
+
+```json
+{
+  "coverage": 0,
+  "stability": 0,
+  "pagination_depth": 0,
+  "refreshability": 0,
+  "data_quality": 0,
+  "engineering_cost": "S|M|L|XL",
+  "legal_tos_risk": "low|medium|high",
+  "recommended_path": "official_api|public_xapi|embedded_json|sitemap_plus_detail|html|rendered_dom|reject",
+  "traffic_light": "Green|Yellow|Red"
+}
+```
+
+## DataAcquisitionMemo
+
+```json
+{
+  "fastest_viable_route": "",
+  "cheapest_robust_route": "",
+  "highest_coverage_route": "",
+  "coverage_ceiling": "",
+  "main_trapdoors": [],
+  "sample_before_full_run": [],
+  "stop_conditions": [],
+  "recommendation": ""
+}
+```
+
+## FeasibilityReport
+
+```json
+{
+  "score": 0,
+  "traffic_light": "Green|Yellow|Red",
+  "interpretation": "",
+  "availability": "",
+  "accessibility": "",
+  "structure": "",
+  "coverage": "",
+  "pagination": "",
+  "runtime": "",
+  "storage": "",
+  "risk": "",
+  "recommended_strategy": "",
+  "confidence": 0.0
+}
+```
+
 ## PipelinePlan
 
 ```yaml
@@ -106,4 +157,3 @@ Always say what has and has not been approved:
   "recommended_next_step": ""
 }
 ```
-
