@@ -13,11 +13,15 @@ if (!targetUrl) {
 const outputPath = resolve(process.argv[3] || "playwright-probe-report.json");
 const maxRows = Number.parseInt(process.env.PLAYWRIGHT_PROBE_MAX_ROWS || "20", 10);
 const timeoutMs = Number.parseInt(process.env.PLAYWRIGHT_PROBE_TIMEOUT_MS || "45000", 10);
+const storageState = process.env.PLAYWRIGHT_STORAGE_STATE
+  ? resolve(process.env.PLAYWRIGHT_STORAGE_STATE)
+  : undefined;
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({
   viewport: { width: 1280, height: 800 },
-  locale: "en-US"
+  locale: "en-US",
+  ...(storageState ? { storageState } : {})
 });
 
 const requests = [];
@@ -129,6 +133,12 @@ const report = {
   console_messages: consoleMessages,
   evidence: {
     screenshot: screenshotPath
+  },
+  source_access: {
+    class: storageState ? "owned_session" : "public",
+    is_publishable_as_public_result: !storageState,
+    storage_state_used: Boolean(storageState),
+    storage_state_path_recorded: storageState ? "[redacted-local-path]" : null
   },
   bounds: {
     max_rows: maxRows,

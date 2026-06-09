@@ -1,28 +1,31 @@
-# Universal Public Data Pipeline Skill
+# Universal Data Acquisition Pipeline Skill
 
-Stop writing scrapers. First, prove the data path.
+Stop writing brittle scrapers. Design the data pipeline.
 
-This Codex skill turns public-data requests into due-diligence reports and reusable pipeline plans. It is aggressive about discovering public APIs, XHR endpoints, page-data routes, sitemaps, catalogs, and embedded JSON because structured endpoints are usually faster, cleaner, and less brittle than HTML scraping.
+This Codex skill turns messy data acquisition requests into due-diligence reports, source classifications, and production-grade scraping/API pipeline plans. It is aggressive about discovering APIs, XHR endpoints, page-data routes, sitemaps, catalogs, embedded JSON, browser network routes, and rendered DOM fallback paths because structured routes are usually faster, cleaner, and less brittle than HTML scraping.
 
-It is balanced about feasibility. If a source works, it says so. If the data is partial, rate-limited, risky, blocked, or not worth collecting, it says that too.
+It is balanced about feasibility. If a source works, it says so. If the data is public, authenticated, licensed, partial, rate-limited, risky, blocked, or not worth collecting, it says that too.
 
 The skill is also portable to Claude-style skill folders because the core artifact is a standard `SKILL.md` plus markdown references.
 
-The core question is not "can we scrape this?"
+The core question is not "can we scrape this page?"
 
 The core question is:
 
 ```text
-Is this public dataset collectible enough to justify building a pipeline?
+What is the right data acquisition path, and can it become a reliable pipeline?
 ```
 
 ## What It Does
 
 - Converts vague data asks into a concrete `DatasetSpec`
+- Classifies source access: public, owned session, provided credentials, licensed API, partner API, internal system, or reject
 - Designs the actual dataset need before collection: decision, grain, fields, freshness, history, coverage, join keys, and exclusions
 - Finds public APIs and storefront/page-data endpoints
 - Derives endpoint templates, query params, headers, and pagination behavior
 - Probes limits with tiny requests before broad collection
+- Supports authorized owned-session Playwright pipelines without publishing them as public results
+- Adds production pipeline design: checkpoints, dedupe, raw/staged/normalized layers, quality gates, run reports, and recovery
 - Uses Playwright/rendered DOM as a bounded last resort when no public structured route works
 - Scores technical and responsible collection feasibility with Green/Yellow/Red status
 - Produces a data acquisition memo: fastest route, cheapest robust route, highest-coverage route, trapdoors, and stop conditions
@@ -31,11 +34,25 @@ Is this public dataset collectible enough to justify building a pipeline?
 
 ## What It Refuses
 
-This skill is for public data only.
+This skill prefers public and structured data, but it can also design authenticated or licensed pipelines when the user has authorization.
 
-It does not do auth bypass, paywall bypass, CAPTCHA solving, private account access, credential or cookie use, fingerprint evasion, exploit generation, or rate-limit bypass.
+It does not do auth bypass, paywall bypass, CAPTCHA solving, unauthorized private account access, credential theft, fingerprint evasion, exploit generation, or rate-limit bypass.
 
-It can detect limits and design within them using backoff, caching, checkpointing, sampling, dedupe, and explicit approval gates.
+Cookies/session state are allowed only for explicit user-owned or authorized workflows. Those outputs must be labeled non-public and must never be published as public pipeline evidence.
+
+The skill can detect limits and design within them using backoff, caching, checkpointing, sampling, dedupe, and explicit approval gates.
+
+## Source Access Classes
+
+| Class | Use Case | Publish As Public Result |
+|---|---|---|
+| Public | Unauthenticated APIs, pages, feeds, sitemaps, files | yes |
+| Owned Session | User's own logged-in account/session | no |
+| Provided Credentials | User-controlled portal credentials | no |
+| Licensed API | API key or data license | depends on license |
+| Partner API | Integration or partner access | depends on terms |
+| Internal System | User's own app/admin/database | no |
+| Restricted/Reject | Requires bypass, evasion, or unauthorized access | no |
 
 ## The Scorecard
 
@@ -69,6 +86,7 @@ Use modes to keep Codex from overbuilding:
 | Pipeline Design | Sources are known and you want a refreshable plan |
 | Sample Validation | You want tiny probes and sample rows |
 | Compliance Boundary | You want Green/Yellow/Red stop conditions |
+| Owned Session | You want to use your own authorized login/session without publishing it as public data |
 | Execution | You explicitly approved collection beyond samples |
 
 Default ladder:
@@ -82,7 +100,7 @@ Dataset Design -> Feasibility -> Endpoint Discovery -> Pagination/Limits -> Pipe
 Prompt:
 
 ```text
-Use $universal-public-data-pipeline to find all public product metadata for Macy's.
+Use $universal-data-acquisition-pipeline to find all public product metadata for Macy's.
 Prefer public APIs or page-data endpoints over HTML scraping. Stop at feasibility first.
 ```
 
@@ -133,7 +151,7 @@ Playwright is allowed, but it is not the first move.
 
 Use it only when public APIs, feeds, sitemaps, embedded JSON, and static HTML are unavailable or incomplete. A Playwright probe should stay tiny, inspect network traffic for public structured routes, capture evidence, and fall back to DOM extraction only when needed.
 
-No login cookies, CAPTCHA solving, stealth plugins, fingerprint evasion, or rate-limit bypass.
+No CAPTCHA solving, stealth plugins, fingerprint evasion, or rate-limit bypass.
 
 Optional setup:
 
@@ -150,20 +168,29 @@ npm run probe:playwright -- "https://example.com/public-page" "outputs/example-p
 
 The helper writes a JSON report and screenshot, including network requests, structured JSON/API-looking responses, JSON-LD snippets, candidate links, console messages, and probe bounds.
 
+Authorized owned-session probe:
+
+```powershell
+$env:PLAYWRIGHT_STORAGE_STATE = "auth\storage-state.json"
+npm run probe:playwright -- "https://example.com/account/export" "outputs/owned-session-probe.json"
+```
+
+The storage state file is gitignored. Do not publish owned-session outputs as public case studies.
+
 ## Install
 
 Clone the repo:
 
 ```powershell
-git clone https://github.com/Pranjay-kumar/universal-public-data-pipeline-skill
+git clone https://github.com/Pranjay-kumar/universal-data-acquisition-pipeline-skill
 ```
 
 Install into Codex skills:
 
 ```powershell
-$dest = "$env:USERPROFILE\.codex\skills\universal-public-data-pipeline"
+$dest = "$env:USERPROFILE\.codex\skills\universal-data-acquisition-pipeline"
 if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
-Copy-Item -Recurse ".\universal-public-data-pipeline-skill" $dest
+Copy-Item -Recurse ".\universal-data-acquisition-pipeline-skill" $dest
 ```
 
 Restart Codex or start a new thread so the skill metadata is loaded.
@@ -171,10 +198,10 @@ Restart Codex or start a new thread so the skill metadata is loaded.
 Install into Claude Code skills:
 
 ```powershell
-$dest = "$env:USERPROFILE\.claude\skills\universal-public-data-pipeline"
+$dest = "$env:USERPROFILE\.claude\skills\universal-data-acquisition-pipeline"
 if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\skills" | Out-Null
-Copy-Item -Recurse ".\universal-public-data-pipeline-skill" $dest
+Copy-Item -Recurse ".\universal-data-acquisition-pipeline-skill" $dest
 ```
 
 Claude.ai custom skills can also use the same folder contents: `SKILL.md`, `references/`, `case-studies/`, and supporting docs.
@@ -182,19 +209,19 @@ Claude.ai custom skills can also use the same folder contents: `SKILL.md`, `refe
 ## Try These Prompts
 
 ```text
-Use $universal-public-data-pipeline to assess whether we can collect all product metadata from REI. Prefer public APIs and page-data endpoints. Stop at feasibility.
+Use $universal-data-acquisition-pipeline to assess whether we can collect all product metadata from REI. Prefer public APIs and page-data endpoints. Stop at feasibility.
 ```
 
 ```text
-Use $universal-public-data-pipeline to find public follower/following endpoints for Wattpad and determine pagination limits. Use tiny probes only.
+Use $universal-data-acquisition-pipeline to find public follower/following endpoints for Wattpad and determine pagination limits. Use tiny probes only.
 ```
 
 ```text
-Use $universal-public-data-pipeline to collect public event listings for NYC tech meetups. Find APIs, feeds, or embedded JSON before HTML scraping.
+Use $universal-data-acquisition-pipeline to collect public event listings for NYC tech meetups. Find APIs, feeds, or embedded JSON before HTML scraping.
 ```
 
 ```text
-Use $universal-public-data-pipeline to design a refreshable public pipeline for government contract awards. Prefer official APIs or bulk datasets.
+Use $universal-data-acquisition-pipeline to design a refreshable public pipeline for government contract awards. Prefer official APIs or bulk datasets.
 ```
 
 More examples live in [PROMPTS.md](PROMPTS.md).
@@ -217,6 +244,7 @@ agents/
 references/
   workflow.md
   modes.md
+  source-access.md
   endpoint-discovery.md
   probing.md
   feasibility-scoring.md
@@ -225,6 +253,7 @@ references/
   output-contracts.md
   pattern-library.md
   playwright-rendered-dom.md
+  pipeline-engineering.md
   examples.md
 case-studies/
   macys.md
@@ -245,6 +274,6 @@ scripts/
 
 Most public websites already fetch structured data for normal users.
 
-The job is to find that public data path, prove it works, understand its limits, decide whether the collection is worth doing, and only then build the pipeline.
+The job is to classify access, find the best data path, prove it works, understand its limits, decide whether the collection is worth doing, and only then build the pipeline.
 
-Scraping HTML first is usually the slow path.
+One-off HTML scraping first is usually the slow path.

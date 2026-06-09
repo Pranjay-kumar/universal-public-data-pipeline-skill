@@ -1,4 +1,7 @@
 node_modules/
 outputs/
+auth/
+storage-state*.json
+*.storageState.json
 playwright-probe-report.json
 playwright-probe-report.png

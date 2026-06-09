@@ -45,7 +45,9 @@ Allowed normal headers include:
 - `Referer`
 - `Origin`
 
-Do not use cookies, auth tokens, CAPTCHA tokens, fingerprint headers, or headers intended to bypass access controls.
+Do not use cookies, auth tokens, CAPTCHA tokens, fingerprint headers, or headers intended to bypass access controls for public probes.
+
+For authorized owned-session or licensed probes, use only user-provided local secrets and record the access class. Never print or commit secret values.
 
 ## Pagination Probing
 
@@ -115,4 +117,3 @@ Design within limits using:
   "confidence": 0.0
 }
 ```
-

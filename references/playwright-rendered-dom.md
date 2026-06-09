@@ -2,6 +2,8 @@
 
 Use Playwright only as a fallback for public data pages when structured routes are unavailable or incomplete.
 
+For authenticated owned-session work, read `source-access.md` first and mark outputs non-public.
+
 ## When To Use
 
 Use this strategy when:
@@ -12,6 +14,8 @@ Use this strategy when:
 - tiny sample validation is enough to decide feasibility
 
 Do not use this strategy for login-only pages, CAPTCHA solving, paywalls, private account data, or anti-bot evasion.
+
+Exception: login/session state is allowed only in `owned_session`, `provided_credentials`, `licensed_api`, `partner_api`, or `internal_system` access classes when the user explicitly authorizes it.
 
 ## Required Evidence Capture
 
@@ -84,7 +88,14 @@ npx playwright install chromium
 npm run probe:playwright -- "https://example.com/public-page" outputs/example-playwright-probe.json
 ```
 
-- Use normal Playwright defaults. Do not add stealth plugins, fingerprint spoofing, CAPTCHA solvers, private cookies, or authenticated browser state.
+For an authorized owned-session probe, use a local Playwright storage state file that is not committed:
+
+```bash
+PLAYWRIGHT_STORAGE_STATE=auth/storage-state.json npm run probe:playwright -- "https://example.com/account/export" outputs/owned-session-probe.json
+```
+
+- Use normal Playwright defaults. Do not add stealth plugins, fingerprint spoofing, CAPTCHA solvers, or private cookies for public probes.
+- For owned-session probes, storage state must remain local, gitignored, and never printed.
 - Prefer network-discovered public endpoints over DOM selectors whenever possible.
 - Keep selectors semantic when possible: links, headings, JSON-LD, visible cards, table rows, accessible labels.
 - Treat infinite scroll as a pagination risk, not a full-run strategy by default.

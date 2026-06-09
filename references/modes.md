@@ -12,7 +12,8 @@ Use modes to prevent overbuilding. A mode narrows the answer shape and defines w
 6. `pipeline-design`: design a refreshable pipeline from known routes.
 7. `sample-validation`: validate tiny sample rows and diagnostics.
 8. `compliance-boundary`: define Green/Yellow/Red boundaries and stop conditions.
-9. `execution`: collect only after explicit approval.
+9. `owned-session`: use authorized user-owned session state for non-public pipelines.
+10. `execution`: collect only after explicit approval.
 
 ## Dataset Design Mode
 
@@ -105,6 +106,25 @@ Default bounds:
 Use when the user asks what is allowed, risky, or forbidden.
 
 Return Green/Yellow/Red, stop conditions, and safer alternatives. Do not provide instructions for bypassing access controls or rate limits.
+
+## Owned-Session Mode
+
+Use when the user explicitly wants to use their own login/session/cookies for data they are authorized to access.
+
+Return:
+
+- `SourceAccessClass`
+- `DatasetNeed`
+- `PipelineQualityPlan`
+- `PipelinePlan`
+- `ApprovalGate`
+
+Rules:
+
+- label outputs `non_public_authorized_result`
+- never publish as a public case study
+- never print or commit cookies, tokens, or storage state
+- stop at CAPTCHA, verification, access-control, or rate-limit boundaries
 
 ## Execution Mode
 

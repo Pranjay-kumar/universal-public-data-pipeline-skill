@@ -6,10 +6,24 @@ Every run should produce structured outputs.
 
 ```json
 {
-  "mode": "dataset-design|feasibility|endpoint-discovery|pagination-limits|source-comparison|pipeline-design|sample-validation|compliance-boundary|execution",
+  "mode": "dataset-design|feasibility|endpoint-discovery|pagination-limits|source-comparison|pipeline-design|sample-validation|compliance-boundary|owned-session|execution",
   "reason": "",
   "will_probe": false,
   "will_collect_beyond_sample": false
+}
+```
+
+## SourceAccessClass
+
+```json
+{
+  "class": "public|owned_session|provided_credentials|licensed_api|partner_api|internal_system|restricted_reject",
+  "is_publishable_as_public_result": false,
+  "authorization_basis": "",
+  "secret_handling": "none|user_local_only|environment_variable|secret_manager",
+  "allowed_outputs": [],
+  "forbidden_outputs": ["cookies", "auth tokens", "captcha tokens", "session dumps", "private keys"],
+  "notes": ""
 }
 ```
 
@@ -82,7 +96,8 @@ Every run should produce structured outputs.
 {
   "required": [],
   "optional": [],
-  "forbidden": ["cookies", "auth tokens", "captcha tokens", "fingerprint headers"],
+  "forbidden": ["captcha tokens", "fingerprint headers", "secrets in logs"],
+  "secret_inputs": [],
   "notes": ""
 }
 ```
@@ -115,7 +130,7 @@ Every run should produce structured outputs.
   "data_quality": 0,
   "engineering_cost": "S|M|L|XL",
   "legal_tos_risk": "low|medium|high",
-  "recommended_path": "official_api|public_xapi|embedded_json|sitemap_plus_detail|html|rendered_dom|reject",
+  "recommended_path": "official_api|licensed_api|partner_api|public_xapi|owned_session_browser|embedded_json|sitemap_plus_detail|html|rendered_dom|reject",
   "traffic_light": "Green|Yellow|Red"
 }
 ```
@@ -132,6 +147,26 @@ Every run should produce structured outputs.
   "sample_before_full_run": [],
   "stop_conditions": [],
   "recommendation": ""
+}
+```
+
+## PipelineQualityPlan
+
+```json
+{
+  "id_strategy": "",
+  "dedupe_strategy": "",
+  "incremental_strategy": "",
+  "checkpoint_strategy": "",
+  "retry_backoff_strategy": "",
+  "rate_limit_strategy": "",
+  "schema_validation": [],
+  "data_quality_tests": [],
+  "observability": [],
+  "failure_recovery": "",
+  "change_detection": "",
+  "secret_handling": "",
+  "publishability": "public_result|non_public_authorized_result|internal_only"
 }
 ```
 

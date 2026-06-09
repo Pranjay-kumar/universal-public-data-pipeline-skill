@@ -1,9 +1,9 @@
 {
-  "name": "universal-public-data-pipeline-skill",
+  "name": "universal-data-acquisition-pipeline-skill",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Optional Playwright helpers for the Universal Public Data Pipeline skill.",
+  "description": "Optional Playwright helpers for the Universal Data Acquisition Pipeline skill.",
   "scripts": {
     "probe:playwright": "node scripts/playwright_probe.mjs"
   },
