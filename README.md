@@ -161,14 +161,12 @@ Use $universal-public-data-pipeline to design a refreshable public pipeline for 
 
 More examples live in [PROMPTS.md](PROMPTS.md).
 
-## Case Studies
+## Real Results
 
 - [Macy's product metadata](case-studies/macys.md): category sitemap to public XAPI, with full catalog-check notes.
 - [Wattpad followers/following](case-studies/wattpad.md): public endpoint discovery with pagination caps and responsible feasibility scoring.
-- [Retail price intelligence](case-studies/retail-price-intelligence.md): using Dataset Design Mode to avoid collecting the wrong catalog data.
-- [Public events](case-studies/public-events.md): designing an event table before choosing feeds, JSON-LD, or search endpoints.
-- [Public jobs](case-studies/public-jobs.md): source comparison for career pages, ATS boards, sitemaps, and embedded JSON.
-- [Marketplace inventory](case-studies/marketplace-inventory.md): pagination/limits thinking for "all listings" asks.
+
+Only publish case studies after using the skill on a real target and recording probe-backed evidence. Keep hypothetical examples in `PROMPTS.md` or `references/examples.md`, not in `case-studies/`.
 
 ## Skill Layout
 
@@ -190,10 +188,6 @@ references/
 case-studies/
   macys.md
   wattpad.md
-  retail-price-intelligence.md
-  public-events.md
-  public-jobs.md
-  marketplace-inventory.md
 PROMPTS.md
 CONTRIBUTING.md
 LICENSE
