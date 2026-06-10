@@ -22,10 +22,10 @@ What is the right data acquisition path, and can it become a reliable pipeline?
 - Classifies source access: public, owned session, provided credentials, licensed API, partner API, internal system, or reject
 - Designs the actual dataset need before collection: decision, grain, fields, freshness, history, coverage, join keys, and exclusions
 - Finds public APIs and storefront/page-data endpoints
-- Captures browser-issued warm-session request context for category/XHR APIs when cold probes are misleading
+- Uses Patchright to generate local browser cookies/storage state and capture warm-session request context for category/XHR APIs when cold probes are misleading
 - Derives endpoint templates, query params, headers, and pagination behavior
 - Probes limits with tiny requests before broad collection
-- Supports authorized owned-session Playwright pipelines without publishing them as public results
+- Supports authorized owned-session Patchright/Playwright pipelines without publishing them as public results
 - Adds production pipeline design: checkpoints, dedupe, raw/staged/normalized layers, quality gates, run reports, and recovery
 - Uses Playwright/rendered DOM as a bounded last resort when no public structured route works
 - Supports optional execution adapters, including Jacob Padilla's Stealth-Requests and Google-Colab-Selenium, under explicit source-access boundaries
@@ -85,7 +85,7 @@ Use the router skill or call a focused child skill directly:
 | `data-acquisition-design` | You know the business goal but not the exact data needed |
 | `data-acquisition-feasibility` | You named a dataset and need to know whether it is collectible |
 | `data-acquisition-discovery` | You want APIs, XHR/fetch routes, feeds, sitemaps, or embedded JSON |
-| `data-acquisition-browser` | You need Playwright, rendered DOM, network capture, or owned-session browser probes |
+| `data-acquisition-browser` | You need Patchright warm-session capture, Playwright rendered DOM fallback, network capture, or owned-session browser probes |
 | `data-acquisition-pipeline` | Sources are known and you want a production-grade pipeline |
 | `data-acquisition-publish` | You want to publish real probe-backed results |
 
@@ -145,22 +145,31 @@ The skill teaches Codex to recognize common public data routes before falling ba
 - mobile API mirrors
 - search, autocomplete, feed, and listing endpoints
 
-## Playwright Fallback
+## Patchright Warm Session And Playwright Fallback
 
-Playwright is allowed, but it is not the first move.
+Patchright is the warm-session helper for pages that need a normal browser context before API/XHR endpoints appear. Playwright remains the plain rendered-DOM fallback.
 
-Use it only when public APIs, feeds, sitemaps, embedded JSON, and static HTML are unavailable or incomplete. A Playwright probe should stay tiny, inspect network traffic for public structured routes, capture evidence, and fall back to DOM extraction only when needed.
+Use browser automation only when public APIs, feeds, sitemaps, embedded JSON, and static HTML are unavailable or incomplete, or when a public page must mint ordinary browser-issued context before its structured APIs can be observed. Browser probes should stay tiny, inspect network traffic for structured routes, capture evidence, and fall back to DOM extraction only when needed.
 
-No CAPTCHA solving, stealth plugins, fingerprint evasion, or rate-limit bypass.
+No CAPTCHA solving, credential extraction, auth bypass, or rate-limit bypass.
 
 Optional setup:
 
 ```powershell
 npm install
+npx patchright install chrome
 npx playwright install chromium
 ```
 
-Run a tiny public-page probe:
+Generate local cookies/storage state and discover endpoint candidates:
+
+```powershell
+npm run probe:patchright -- "https://example.com/category" "outputs/example-patchright-endpoints.json"
+```
+
+The Patchright helper writes a JSON report and screenshot, saves local storage state under `auth/`, and records `endpoint_candidates`, structured requests, structured responses, safe headers, and response snippets. Cookie/storage values and local paths are not printed in reports.
+
+Run a tiny public-page Playwright fallback probe:
 
 ```powershell
 npm run probe:playwright -- "https://example.com/public-page" "outputs/example-playwright-probe.json"
@@ -171,8 +180,9 @@ The helper writes a JSON report and screenshot, including network requests, stru
 Authorized owned-session probe:
 
 ```powershell
-$env:PLAYWRIGHT_STORAGE_STATE = "auth\storage-state.json"
-npm run probe:playwright -- "https://example.com/account/export" "outputs/owned-session-probe.json"
+$env:PATCHRIGHT_STORAGE_STATE = "auth\target-storage-state.json"
+$env:PATCHRIGHT_USER_DATA_DIR = "auth\target-profile"
+npm run probe:patchright -- "https://example.com/account/export" "outputs/owned-session-endpoints.json"
 ```
 
 The storage state file is gitignored. Do not publish owned-session outputs as public case studies.
@@ -184,7 +194,8 @@ Some public category APIs are easiest to use after the normal browser page has m
 Warm Session Capture flow:
 
 ```text
-visible browser page
+Patchright visible browser page
+-> generate local cookies/storage state
 -> observe XHR/fetch/category API
 -> save endpoint template + safe headers
 -> keep cookies/storage local if needed
@@ -246,9 +257,20 @@ More examples live in [PROMPTS.md](PROMPTS.md).
 ## Real Results
 
 - [Macy's product metadata pipeline](case-studies/macys.md): robots-listed sitemap index to PDP shards to product detail XAPI, with a tracked `pipeline.yaml`, sample rows, and run report.
+- [Patchright warm-session test plan](case-studies/patchright-test-plan.md): 10 bounded cases for validating browser-minted cookies/storage, endpoint discovery, direct public APIs, and structured fallback paths.
+- [Macy's Patchright men's shirts probe](case-studies/macys-patchright-mens-shirts.md): visible Patchright loaded the public category and pagination, but no category API was observed; best current route is SSR product grid HTML plus pagination.
+- [Target Patchright category products](case-studies/target-patchright-category-products.md): Patchright observed Target Redsky PLP/product-summary JSON APIs and rendered product cards; Green for bounded category discovery.
+- [Eventbrite Patchright public events](case-studies/eventbrite-patchright-public-events.md): Patchright loaded a city event page, JSON-LD, and destination APIs; Yellow until pagination/completeness is validated.
 - [Wattpad followers/following](case-studies/wattpad.md): public endpoint discovery with pagination caps and responsible feasibility scoring.
 - [Greenhouse and Lever public job boards](case-studies/greenhouse-lever-jobs.md): ATS public APIs, provider-specific pagination, and hiring-signal pipeline design.
+- [ATS public jobs probe](case-studies/ats-public-jobs-probe.md): direct Greenhouse and Lever JSON APIs worked without Patchright; Green for selected public boards.
+- [NYC Open Data Socrata probe](case-studies/nyc-open-data-socrata-probe.md): official Socrata API exposed 311 metadata, count, sampling, ordering, and pagination; Green.
 - [StreetEasy public real estate listings](case-studies/streeteasy.md): JSON-LD and sitemap discovery with a clear Yellow boundary around 403s and disallowed routes.
+- [StreetEasy Patchright LES rentals probe](case-studies/streeteasy-patchright-les-rentals.md): valid LES search page exposed JSON-LD, pagination, and an `api-v6` `searchRentals` response, with repeat-probe human-verification risk.
+- [Travel search Patchright feasibility](case-studies/travel-search-patchright-feasibility.md): Expedia/Rome2Rio/Wanderu hit bot verification, while Amtrak exposed useful public reference JSON; Yellow overall.
+- [News metadata public probe](case-studies/news-metadata-public-probe.md): NPR RSS and sampled article metadata worked directly; Green for feeds, Yellow for keyword search pages.
+- [Yahoo Finance public market and news probe](case-studies/market-news-public-probe.md): chart JSON and RSS worked without browser state; Green-Yellow.
+- [OpenStreetMap Nominatim public places probe](case-studies/osm-nominatim-public-places-probe.md): official Nominatim JSON worked for tiny lookup; Green for lookup, Yellow for broad collection.
 
 Only publish case studies after using the skill on a real target and recording probe-backed evidence. Keep hypothetical examples in `PROMPTS.md` or `skills/data-acquisition-core/references/examples.md`, not in `case-studies/`.
 
@@ -285,20 +307,32 @@ skills/
   data-acquisition-browser/
     SKILL.md
     scripts/
+      patchright_cookie_endpoint_probe.mjs
       playwright_probe.mjs
   data-acquisition-pipeline/
     SKILL.md
   data-acquisition-publish/
     SKILL.md
 case-studies/
+  patchright-test-plan.md
   macys.md
+  macys-patchright-mens-shirts.md
+  target-patchright-category-products.md
+  eventbrite-patchright-public-events.md
   macys-product-metadata/
     pipeline.yaml
     sample-rows.jsonl
     run-report.json
   wattpad.md
   greenhouse-lever-jobs.md
+  ats-public-jobs-probe.md
+  nyc-open-data-socrata-probe.md
   streeteasy.md
+  streeteasy-patchright-les-rentals.md
+  travel-search-patchright-feasibility.md
+  news-metadata-public-probe.md
+  market-news-public-probe.md
+  osm-nominatim-public-places-probe.md
 PROMPTS.md
 CONTRIBUTING.md
 LICENSE

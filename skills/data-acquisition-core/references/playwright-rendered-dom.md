@@ -1,6 +1,8 @@
-# Playwright Rendered-DOM Fallback
+# Browser Rendered-DOM And Warm-Session Fallback
 
 Use Playwright only as a fallback for public data pages when structured routes are unavailable or incomplete.
+
+Use Patchright when the target page must generate local browser cookies/storage state before its API/XHR endpoints are visible or replayable.
 
 For authenticated owned-session work, read `source-access.md` first and mark outputs non-public.
 
@@ -19,7 +21,7 @@ Exception: login/session state is allowed only in `owned_session`, `provided_cre
 
 ## Required Evidence Capture
 
-For every Playwright probe, record:
+For every browser probe, record:
 
 - target URL
 - viewport and locale
@@ -52,11 +54,12 @@ Default bounds:
 
 Increase only after explicit approval.
 
-## PlaywrightPlan
+## BrowserProbePlan
 
 ```json
 {
   "reason_for_browser_fallback": "",
+  "runtime": "patchright|playwright",
   "urls": [],
   "wait_strategy": "",
   "network_inspection": {
@@ -80,6 +83,16 @@ Increase only after explicit approval.
 
 ## Implementation Notes
 
+- For warm-session cookie/storage generation plus endpoint discovery, prefer the bundled Patchright helper:
+
+```bash
+npm install
+npx patchright install chrome
+npm run probe:patchright -- "https://example.com/category" outputs/example-patchright-endpoints.json
+```
+
+- The Patchright helper writes local storage state under `auth/`, captures structured network candidates in `endpoint_candidates`, and redacts local storage/profile paths in the report.
+
 - If this repo is available locally, prefer the bundled helper:
 
 ```bash
@@ -88,20 +101,20 @@ npx playwright install chromium
 npm run probe:playwright -- "https://example.com/public-page" outputs/example-playwright-probe.json
 ```
 
-For an authorized owned-session probe, use a local Playwright storage state file that is not committed:
+For an authorized owned-session endpoint probe, use Patchright and a local storage state file that is not committed:
 
 ```bash
-PLAYWRIGHT_STORAGE_STATE=auth/storage-state.json npm run probe:playwright -- "https://example.com/account/export" outputs/owned-session-probe.json
+PATCHRIGHT_STORAGE_STATE=auth/storage-state.json npm run probe:patchright -- "https://example.com/account/export" outputs/owned-session-endpoints.json
 ```
 
-- For public probes, use normal Playwright defaults.
-- For Warm Session Capture, use a user-controlled browser context to observe browser-issued XHR/fetch routes and safe headers. Keep storage state local and classify the run as `owned_session` if cookies or local storage are required for replay.
+- For public rendered-DOM probes, use normal Playwright defaults.
+- For Warm Session Capture, use Patchright in a user-controlled browser context to generate local cookies/storage state and observe browser-issued XHR/fetch routes and safe headers. Keep storage state local and classify the run as `owned_session` if cookies or local storage are required for replay.
 - Do not add CAPTCHA solvers, fingerprint spoofing, auth bypass, or rate-limit bypass.
 - For owned-session probes, storage state must remain local, gitignored, and never printed.
 - Prefer network-discovered public endpoints over DOM selectors whenever possible.
 - Keep selectors semantic when possible: links, headings, JSON-LD, visible cards, table rows, accessible labels.
 - Treat infinite scroll as a pagination risk, not a full-run strategy by default.
-- Include Playwright outputs in `ProbeResults`, `FeasibilityScorecard`, and `DataAcquisitionMemo`.
+- Include Patchright or Playwright outputs in `ProbeResults`, `FeasibilityScorecard`, and `DataAcquisitionMemo`.
 
 ## Feasibility Guidance
 

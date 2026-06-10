@@ -1,6 +1,6 @@
 ---
 name: universal-data-acquisition-pipeline
-description: Trigger when the user wants to collect, structure, evaluate, crawl, extract, refresh, or build reusable data acquisition pipelines from websites, APIs, portals, files, or rendered apps. Use for dataset design, source classification, feasibility, endpoint discovery, authorized/owned-session scraping plans, Playwright fallback, source probing, pagination analysis, scraper/pipeline architecture, sample validation, refresh design, and output contracts. Do not trigger for ordinary browsing, exploitative access, credential theft, CAPTCHA solving, auth bypass, rate-limit bypass, or non-data tasks.
+description: Trigger when the user wants to collect, structure, evaluate, crawl, extract, refresh, or build reusable data acquisition pipelines from websites, APIs, portals, files, or rendered apps. Use for dataset design, source classification, feasibility, endpoint discovery, authorized/owned-session scraping plans, Patchright warm-session cookie generation, Playwright fallback, source probing, pagination analysis, scraper/pipeline architecture, sample validation, refresh design, and output contracts. Do not trigger for ordinary browsing, exploitative access, credential theft, CAPTCHA solving, auth bypass, rate-limit bypass, or non-data tasks.
 ---
 
 # Universal Data Acquisition Pipeline
@@ -17,7 +17,7 @@ Use the child skill that best matches the request:
 - `data-acquisition-design`: DatasetNeed, DatasetSpec, scope control, and "what data do we actually need?"
 - `data-acquisition-feasibility`: feasibility scoring, source comparison, Green/Yellow/Red decisions, and approval gates.
 - `data-acquisition-discovery`: endpoint discovery, public APIs, GraphQL, XHR/fetch, sitemaps, embedded JSON, and pagination probes.
-- `data-acquisition-browser`: Playwright, rendered DOM, browser network capture, and authorized owned-session probes.
+- `data-acquisition-browser`: Patchright warm-session cookie/storage generation, browser network capture, Playwright rendered DOM fallback, and authorized owned-session probes.
 - `data-acquisition-pipeline`: production pipeline architecture, `pipeline.yaml`, raw/staged/normalized layers, quality gates, and run reports.
 - `data-acquisition-publish`: probe-backed case studies and publishable/non-publishable result packaging.
 
@@ -85,7 +85,7 @@ Load only the shared core references needed for the request from `skills/data-ac
 - Treat every ask as due diligence before implementation: answer "should we do this?" before "how do we code it?"
 - Treat vague "all data" requests as dataset-design problems before source discovery.
 - Use normal browser-style headers only when needed for public unauthenticated responses.
-- When a public page mints request context for public XHR/API calls, use Warm Session Capture: capture user-owned browser storage state and observed non-secret request templates locally, then replay tiny probes in that same authorized browser context.
+- When a public page mints request context for public XHR/API calls, use Warm Session Capture: run the Patchright helper to generate user-owned local cookies/storage state and capture observed non-secret request templates, then replay tiny probes in that same authorized browser context.
 - Detect rate limits and design within them using backoff, caching, checkpointing, sampling, and approval gates. Do not bypass rate limits or access controls.
 - If cookies, credentials, or auth are involved, switch to `owned-session` or `licensed_api`, mark outputs non-public, avoid storing secrets, and require explicit approval.
 - Stop escalation when a path requires auth bypass, credential extraction, CAPTCHA solving, fingerprint evasion, private third-party access, or rate-limit bypass.

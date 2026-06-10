@@ -31,7 +31,7 @@ Best for:
 
 Document endpoint templates, params, headers, pagination, and fallback.
 
-If cold HTTP probes fail but a normal user-visible page issues the API from the browser, switch to Warm Session Capture. Capture the live XHR request template from a user-controlled browser context, preserve only safe headers in the pipeline plan, and keep any storage state local and uncommitted.
+If cold HTTP probes fail but a normal user-visible page issues the API from the browser, switch to Warm Session Capture. Use the Patchright helper to generate local browser cookies/storage state, capture the live XHR request template from that user-controlled browser context, preserve only safe headers in the pipeline plan, and keep cookies/storage state local and uncommitted.
 
 ## Embedded JSON Or Hydration
 
@@ -83,10 +83,10 @@ Use when the data is visible in a normal browser session and the site mints requ
 
 Recommended flow:
 
-1. Open the public target page in a user-controlled visible browser.
-2. Let the page load normally and accept only user-intended consent prompts.
-3. Capture network requests for XHR/fetch/GraphQL/page-data routes.
-4. Save only endpoint templates, query params, safe headers, and response schemas.
+1. Run `npm run probe:patchright -- "<target-url>" "outputs/<target>-endpoints.json"`.
+2. Let the page load normally and accept only user-intended consent prompts in the visible browser.
+3. Capture network requests for XHR/fetch/GraphQL/page-data routes and save local storage state under `auth/`.
+4. Save only endpoint templates, query params, safe headers, response schemas, and sample row shape.
 5. If cookies/storage are needed for replay, classify as `owned_session` and keep storage state local.
 6. Use tiny probes before broad collection.
 

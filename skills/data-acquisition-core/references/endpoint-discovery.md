@@ -16,6 +16,7 @@ Use multiple signals:
 - Compare public page URLs against endpoint URLs to infer templates.
 - Look for public sitemap, catalog, directory, search, and browse sources that expose IDs.
 - Use normal network inspection when available to observe public XHR/fetch calls made by an unauthenticated page load.
+- When cold HTTP probes miss APIs because the page must first mint browser-issued cookies or storage state, run the Patchright warm-session probe, review `endpoint_candidates`, and convert the observed XHR/fetch/GraphQL/page-data routes into endpoint templates.
 
 ## Endpoint Template Extraction
 
@@ -62,6 +63,8 @@ Use normal browser-style headers only when needed:
 ```
 
 Prefer the smallest header set that works. If a request only works with cookies, private tokens, CAPTCHA state, fingerprint headers, or unusual anti-bot headers, mark it restricted and do not use it.
+
+For Patchright warm-session reports, only promote ordinary safe headers such as `Accept`, `Accept-Language`, `Origin`, `Referer`, `Content-Type`, or `X-Requested-With`. Keep cookies, storage state, browser profiles, and token-bearing headers local and out of reports.
 
 ## Endpoint Preference
 

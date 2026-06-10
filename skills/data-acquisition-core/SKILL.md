@@ -21,7 +21,7 @@ Load only what the active task needs:
 - `references/source-strategies.md`: source strategy tradeoffs.
 - `references/pattern-library.md`: common API/source archetypes.
 - `references/endpoint-discovery.md`: endpoint reverse-engineering.
-- `references/playwright-rendered-dom.md`: Playwright fallback and owned-session browser probes.
+- `references/playwright-rendered-dom.md`: Patchright warm-session capture, Playwright fallback, and owned-session browser probes.
 - `references/execution-adapters.md`: warm-session capture, adapter ladder, and optional Jacob Padilla adapter notes.
 - `references/pipeline-engineering.md`: production pipeline design.
 - `references/examples.md`: response shapes.
